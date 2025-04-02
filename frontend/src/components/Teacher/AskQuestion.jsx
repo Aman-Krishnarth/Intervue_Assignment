@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    isCurrentQuestionSent,
-    setCurrentQuestion,
-} from "../../redux/questionSlice/questionSlice";
+import { setCurrentQuestion } from "../../redux/questionSlice/questionSlice";
 import { Link, useNavigate } from "react-router-dom";
+
 const AskQuestion = () => {
     const dispatch = useDispatch();
-    // reset everything
 
     const currentQuestion = useSelector(
         (state) => state.question.currentQuestion
     );
 
-    console.log("ask qusetion mein hu");
-    console.log(currentQuestion);
-
-    const navigate = useNavigate();
-
-    // State to store the question data
     const [questionData, setQuestionData] = useState({
         question: "",
         options: [
@@ -28,6 +19,8 @@ const AskQuestion = () => {
         time: "60", // Default time is 60 seconds
         totalVotes: 0,
     });
+
+    const [loading, setLoading] = useState(false);
 
     // Handle changes in the question input
     const handleQuestionChange = (e) => {
@@ -89,11 +82,18 @@ const AskQuestion = () => {
             return;
         }
 
-        // Here, you would send the data to the backend or process it further
-        console.log("Question Data:", questionData);
+        // Start loading state
+        setLoading(true);
 
-        dispatch(setCurrentQuestion(questionData)); // Dispatch to set the current question
-        // navigate("/teacher/askQuestion");
+        // Simulate the process (e.g., API call or dispatch action) with a delay
+        setTimeout(() => {
+            console.log("Question Data:", questionData);
+
+            dispatch(setCurrentQuestion(questionData)); // Dispatch to set the current question
+            setLoading(false); // Stop loading after processing
+            // You can optionally navigate if needed
+            // navigate("/teacher/askQuestion");
+        }, 2000); // Simulate a 2-second delay (adjust as needed)
     };
 
     return (
@@ -106,12 +106,13 @@ const AskQuestion = () => {
                 <span className="text-black font-extrabold">Get Started</span>
             </h1>
             <p className="text-gray-500 text-lg mt-2 w-1/2">
-                you’ll have the ability to create and manage polls, ask
+                You’ll have the ability to create and manage polls, ask
                 questions, and monitor your students' responses in real-time.
             </p>
 
-            <Link className="text-2xl my-2 font-semibold cursor-pointer"
-            to="/teacher/pollHistory"
+            <Link
+                className="text-2xl my-2 font-semibold cursor-pointer"
+                to="/teacher/pollHistory"
             >
                 View <span className="font-bold">Past Polls</span>
             </Link>
@@ -201,8 +202,9 @@ const AskQuestion = () => {
                 <button
                     onClick={handleAskQuestion}
                     className="bg-purple-600 text-white px-6 py-2 rounded-2xl text-lg cursor-pointer"
+                    disabled={loading} // Disable the button when loading
                 >
-                    Ask Question
+                    {loading ? <span>Processing...</span> : "Ask Question"}
                 </button>
             </div>
         </div>

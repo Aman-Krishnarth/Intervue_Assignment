@@ -13,22 +13,15 @@ import axios from "axios";
 async function addToDb(currentQuestion) {
     try {
         const result = await axios.post(
-            "http://localhost:8000/api/v1/poll/create",
+            "https://intervue-assignment-2iyx.onrender.com/api/v1/poll/create",
             {
                 options: currentQuestion.options,
                 totalVotes: currentQuestion.totalVotes,
                 question: currentQuestion.question,
             }
         );
-
-        console.log("result");
-
-        if (result.data.success) {
-            alert(result.data.message);
-        }
     } catch (error) {
         console.log("add to db catch");
-        alert("something went wrong");
     }
 }
 
@@ -41,13 +34,12 @@ function App() {
     const isQuestionDone = useSelector(
         (state) => state.question.isQuestionDone
     );
-    const role = sessionStorage.getItem("role");
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const socketio = io("http://localhost:8000", {
+        const socketio = io("https://intervue-assignment-2iyx.onrender.com", {
             transports: ["websocket"],
         });
 
@@ -89,7 +81,7 @@ function App() {
             dispatch(isCurrentQuestionSent(true));
             console.log("question sent update kar diya");
             console.log(isQuestionSent);
-
+            const role = sessionStorage.getItem("role");
             console.log("role");
             console.log(role);
 
@@ -105,15 +97,12 @@ function App() {
 
             // dispatch karne se pehle ek baar dekh lo
 
+            const role = sessionStorage.getItem("role");
+
             if (role === "teacher") {
                 console.log("teacher hu aur backend pe requst bhej raha hu");
 
-                console.log(currentQuestion);
-
                 addToDb(currentQuestion);
-
-                console.log("ab sab kuch reset kar dunga");
-                alert("navigating in 5 seconds");
 
                 setTimeout(() => {
                     dispatch(setCurrentQuestion({}));
@@ -122,7 +111,6 @@ function App() {
                     navigate("/teacher/askQuestion");
                 }, 5000);
             } else {
-                alert("navigating in 5 seconds");
                 setTimeout(() => {
                     navigate("/student/waiting");
                 }, 5000);
@@ -145,8 +133,6 @@ function App() {
             //     questionSent: false,
             //     selectedIndex: null,
             // }
-
-            alert("navigating in 5 seconds");
 
             setTimeout(() => {
                 dispatch(setCurrentQuestion({}));

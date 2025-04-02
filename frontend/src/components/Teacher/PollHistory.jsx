@@ -8,7 +8,7 @@ function PollHistory() {
     useEffect(() => {
         const fetchPollHistory = async () => {
             const result = await axios.get(
-                "http://localhost:8000/api/v1/poll/allPolls"
+                "https://intervue-assignment-2iyx.onrender.com/api/v1/poll/allPolls"
             );
 
             console.log(result);
@@ -88,7 +88,7 @@ function PollHistory() {
                                                     {index + 1}
                                                 </span>
                                                 <span className="text-lg">
-                                                    {option.option}
+                                                    {option.option} ({votePercentage}%)
                                                 </span>
                                             </div>
                                         </div>
