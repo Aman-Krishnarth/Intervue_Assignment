@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "https://intervue-assignment-1.onrender.com",
         methods: ["GET", "POST"],
     },
 });
@@ -16,7 +16,7 @@ const userSocketMap = {};
 let currentQuestion = {};
 
 io.on("connection", (socket) => {
-    // console.log("user connected");
+    console.log("user connected");
 
     socket.on("newQuestion", (data) => {
         console.log("new question aaya hai");
